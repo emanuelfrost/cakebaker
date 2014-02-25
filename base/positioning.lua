@@ -31,126 +31,137 @@ local setPos = function(obj, x, y)
     obj.y = y  
 end
 
-local getParentPos = function(parent, xMod, yMod)
-    local x = parent.x-parent.anchorX*parent.contentWidth+xMod  
-    local y = parent.y-parent.anchorY*parent.contentHeight+yMod 
+local getPos = function(obj, xMod, yMod)
+    local x = obj.x-obj.anchorX*obj.contentWidth+xMod  
+    local y = obj.y-obj.anchorY*obj.contentHeight+yMod 
     
     return x, y
 end
 
 --Positioning
 
-Positioning.tl = function( obj, opt )
+Positioning.tl = function( opt )
+    local x,y
     if hasParent(opt) then        
-        setPos(obj, getParentPos(opt.parent, 0, 0))
+        x,y = getPos(opt.parent, 0, 0)  
     else
-        setPos(obj, 0, 0)        
+        x,y = 0, 0
     end
     
-    return obj
+    return x,y
 end
 
-Positioning.tc = function( obj, opt )
+Positioning.tc = function( opt )
+    local x,y
     if hasParent(opt) then        
-        setPos(obj, getParentPos(opt.parent, opt.parent.contentWidth/2,0))
+        x,y = getPos(opt.parent, opt.parent.contentWidth/2,0)
     else
-        setPos(obj, display.contentCenterX, 0) 
+        x,y = display.contentCenterX, 0
     end
     
-    return obj
+    return x,y
 end
 
-Positioning.tr = function( obj, opt )
+Positioning.tr = function( opt )
+    local x,y
     if hasParent(opt) then        
-        setPos(obj, getParentPos(opt.parent, opt.parent.contentWidth,0))
+        x,y = getPos(opt.parent, opt.parent.contentWidth,0)
     else
-        setPos(obj, display.contentWidth, 0) 
+        x,y = display.contentWidth, 0
     end
     
-    return obj
+    return x,y
 end
 
 
-Positioning.cl = function( obj, opt )
+Positioning.cl = function( opt )
+    local x,y 
     if hasParent(opt) then        
-        setPos(obj, getParentPos(opt.parent, 0,opt.parent.contentHeight/2))
+        x,y = getPos(opt.parent, 0,opt.parent.contentHeight/2)
     else
-        setPos(obj, 0, display.contentCenterY)      
+        x,y = 0, display.contentCenterY
     end
     
-    return obj
+    return x,y
 end
 
-Positioning.cc = function( obj, opt )
+Positioning.cc = function( opt )
+    local x,y
     if hasParent(opt) then
-        setPos(obj,getParentPos(opt.parent, opt.parent.contentWidth/2,opt.parent.contentHeight/2))
+        x,y = getPos(opt.parent, opt.parent.contentWidth/2,opt.parent.contentHeight/2)
     else
-        setPos(obj, display.contentCenterX, display.contentCenterY)   
+        x,y = display.contentCenterX, display.contentCenterY
     end
     
-    return obj
+    return x,y
 end
 
-Positioning.cr = function( obj, opt )
+Positioning.cr = function( opt )
+    local x,y
     if hasParent(opt) then
-        setPos(obj, getParentPos(opt.parent, opt.parent.contentWidth,opt.parent.contentHeight/2))
+        x,y = getPos(opt.parent, opt.parent.contentWidth,opt.parent.contentHeight/2)
     else
-        setPos(obj, display.contentWidth, display.contentCenterY)           
+        x,y = display.contentWidth, display.contentCenterY           
     end
     
-    return obj
+    return x,y
 end
 
 
-Positioning.bl = function( obj, opt )
+Positioning.bl = function( opt )
+    local x,y
     if hasParent(opt) then        
-        setPos(obj, getParentPos(opt.parent, 0,opt.parent.contentHeight))
+        x,y = getPos(opt.parent, 0,opt.parent.contentHeight)
     else
-        setPos(obj, 0, display.contentHeight) 
+        x,y = 0, display.contentHeight
     end
     
-    return obj
+    return x,y
 end
 
-Positioning.bc = function( obj, opt )
+Positioning.bc = function( opt )
+    local x,y
     if hasParent(opt) then        
-        setPos(obj, getParentPos(opt.parent, opt.parent.contentWidth/2,opt.parent.contentHeight))
+        x,y = getPos(opt.parent, opt.parent.contentWidth/2,opt.parent.contentHeight)
     else
-        setPos(obj, display.contentCenterX, display.contentHeight)        
+        x,y = display.contentCenterX, display.contentHeight        
     end
     
-    return obj
+    return x,y
 end
 
-Positioning.br = function( obj, opt )
+Positioning.br = function( opt )
+    local x,y
     if hasParent(opt) then        
-        setPos(obj, getParentPos(opt.parent, opt.parent.contentWidth,opt.parent.contentHeight))
+        x,y = getPos(opt.parent, opt.parent.contentWidth,opt.parent.contentHeight)
     else
-        setPos(obj, display.contentWidth, display.contentHeight)           
+        x,y = display.contentWidth, display.contentHeight
     end
     
-    return obj
+    return x,y
 end
 
 
-Positioning.pos = function ( obj, x, y, opt )
+Positioning.pos = function ( xMod, yMod, opt )
+    local x,y
     if hasParent(opt) then 
-        setPos(obj, getParentPos(opt.parent, opt.parent.contentWidth*x,opt.parent.contentHeight*y))        
+        x,y = getPos(opt.parent, opt.parent.contentWidth*xMod,opt.parent.contentHeight*yMod)
     else
-        setPos(obj, display.contentWidth*x, display.contentHeight*y)           
+        x,y = display.contentWidth*xMod, display.contentHeight*yMod           
     end
     
-    return obj
+    return x,y
 end
 
 --Grid
 
-Positioning.grid = function ( obj, x, y, opt )
+Positioning.grid = function ( xMod, yMod, opt )
+    local x,y
     if parentHasGrid(opt) then         
-        setPos(obj, opt.parent:getGridPos(x,y))
+        x,y = opt.parent:getGridPos(xMod,yMod)
     end
     
-    return obj
+    return x,y
 end
 
 Positioning.setGrid = function ( obj, grid )
@@ -158,7 +169,7 @@ Positioning.setGrid = function ( obj, grid )
     local yGrid = obj.contentHeight/grid[2]
     
     function obj:getGridPos(x,y)
-        return getParentPos(obj, x*xGrid,y*yGrid)        
+        return getPos(obj, x*xGrid,y*yGrid)        
     end
         
     return obj
@@ -166,24 +177,65 @@ end
 
 --Below, above, ToLeftOf, ToRightOf
 
-Positioning.below = function ( obj, target, opt )
-    setPos(obj, target.x, target.y+target.contentHeight)    
-    return obj
+Positioning.below = function ( target )
+    local ccx, ccy = Positioning.getCc(target)
+    local blx, bly = Positioning.getBl(target)
+    return ccx, bly
 end
 
-Positioning.above = function ( obj, target, opt )
-    setPos(obj, target.x, target.y-target.contentHeight)    
-    return obj
+Positioning.above = function ( target )
+    local ccx, ccy = Positioning.getCc(target)
+    local tlx, tly = Positioning.getTl(target)
+    return ccx, tly  
 end
 
-Positioning.toLeftOf = function ( obj, target, opt )
-    setPos(obj, target.x-target.contentWidth, target.y)    
-    return obj
+Positioning.toLeftOf = function ( target )
+    local ccx, ccy = Positioning.getCc(target)
+    local tlx, tly = Positioning.getTl(target)
+    return tlx, ccy  
 end
 
-Positioning.toRightOf = function ( obj, target, opt )
-    setPos(obj, target.x+target.contentWidth, target.y)    
-    return obj
+Positioning.toRightOf = function ( target )
+    local ccx, ccy = Positioning.getCc(target)
+    local trx, try = Positioning.getTr(target)
+    return trx, ccy  
+end
+
+--Getters
+
+Positioning.getTl = function(obj)
+    local x = obj.x-obj.anchorX*obj.contentWidth 
+    local y = obj.y-obj.anchorY*obj.contentHeight
+    
+    return x, y
+end
+
+Positioning.getTr = function(obj)
+    local x = obj.x+(1-obj.anchorX)*obj.contentWidth 
+    local y = obj.y-obj.anchorY*obj.contentHeight
+    
+    return x, y
+end
+
+Positioning.getBl = function(obj)
+    local x = obj.x-obj.anchorX*obj.contentWidth 
+    local y = obj.y+(1-obj.anchorY)*obj.contentHeight
+    
+    return x, y
+end
+
+Positioning.getBr = function(obj)
+    local x = obj.x+(1-obj.anchorX)*obj.contentWidth 
+    local y = obj.y+(1-obj.anchorY)*obj.contentHeight
+    
+    return x, y
+end
+
+Positioning.getCc = function(obj)
+    local x = obj.x+(.5-obj.anchorX)*obj.contentWidth 
+    local y = obj.y+(.5-obj.anchorY)*obj.contentHeight
+    
+    return x, y
 end
 
 --Anchoring
@@ -238,8 +290,7 @@ end
 Positioning.push = function(obj, xMod, yMod)
     local x = obj.x+(obj.contentWidth*xMod)
     local y = obj.y+(obj.contentHeight*yMod)
-    setPos(obj, x, y)
-    return obj
+    return x,y
 end
 
 --Bake
@@ -257,6 +308,11 @@ Positioning.bake = function( obj, bakeOpt )
         return opt
     end
     
+    local setPosW = function(obj, x, y)
+        setPos(obj, x, y)
+        return obj
+    end
+    
     local getPushMod = function(mod)
         if mod == nil then
             return 1
@@ -269,25 +325,50 @@ Positioning.bake = function( obj, bakeOpt )
         Positioning.setGrid(obj, bakeOpt.grid)
     end
     
-    function obj:tl(opt) return Positioning.tl(self, wrapPosOpt(opt)) end    
-    function obj:tc(opt) return Positioning.tc(self, wrapPosOpt(opt)) end    
-    function obj:tr(opt) return Positioning.tr(self, wrapPosOpt(opt)) end
+    function obj:tl(opt) return setPosW(self, Positioning.tl(wrapPosOpt(opt))) end    
+    function obj:tc(opt) return setPosW(self, Positioning.tc(wrapPosOpt(opt))) end    
+    function obj:tr(opt) return setPosW(self, Positioning.tr(wrapPosOpt(opt))) end
     
-    function obj:cl(opt) return Positioning.cl(self, wrapPosOpt(opt)) end    
-    function obj:cc(opt) return Positioning.cc(self, wrapPosOpt(opt)) end    
-    function obj:cr(opt) return Positioning.cr(self, wrapPosOpt(opt)) end
+    function obj:cl(opt) return setPosW(self, Positioning.cl(wrapPosOpt(opt))) end    
+    function obj:cc(opt) return setPosW(self, Positioning.cc(wrapPosOpt(opt))) end    
+    function obj:cr(opt) return setPosW(self, Positioning.cr(wrapPosOpt(opt))) end
     
-    function obj:bl(opt) return Positioning.bl(self, wrapPosOpt(opt)) end    
-    function obj:bc(opt) return Positioning.bc(self, wrapPosOpt(opt)) end    
-    function obj:br(opt) return Positioning.br(self, wrapPosOpt(opt)) end
+    function obj:bl(opt) return setPosW(self, Positioning.bl(wrapPosOpt(opt))) end    
+    function obj:bc(opt) return setPosW(self, Positioning.bc(wrapPosOpt(opt))) end    
+    function obj:br(opt) return setPosW(self, Positioning.br(wrapPosOpt(opt))) end
     
-    function obj:pos(x, y, opt) return Positioning.pos(self, x, y, wrapPosOpt(opt)) end
-    function obj:grid(x, y, opt) return Positioning.grid(self, x, y, wrapPosOpt(opt)) end
+    function obj:pos(x, y, opt) return setPosW(self, Positioning.pos(x, y, wrapPosOpt(opt))) end
+    function obj:grid(x, y, opt) return setPosW(self, Positioning.grid(x, y, wrapPosOpt(opt))) end
     
-    function obj:below(target, opt) return Positioning.below(self, target, wrapPosOpt(opt)) end
-    function obj:above(target, opt) return Positioning.above(self, target, wrapPosOpt(opt)) end
-    function obj:toLeftOf(target, opt) return Positioning.toLeftOf(self, target, wrapPosOpt(opt)) end
-    function obj:toRightOf(target, opt) return Positioning.toRightOf(self, target, wrapPosOpt(opt)) end
+    function obj:below(target) return setPosW(self, Positioning.below(target)) end
+    function obj:above(target) return setPosW(self, Positioning.above(target)) end
+    function obj:toLeftOf(target) return setPosW(self, Positioning.toLeftOf(target)) end
+    function obj:toRightOf(target) return setPosW(self, Positioning.toRightOf(target)) end
+        
+    function obj:getTl()
+        local x,y = Positioning.getTl(self)        
+        return {x=x, y=y}
+    end
+    
+    function obj:getTr()
+        local x,y = Positioning.getTr(self)        
+        return {x=x, y=y}
+    end
+    
+    function obj:getBl()
+        local x,y = Positioning.getBl(self)        
+        return {x=x, y=y}
+    end
+    
+    function obj:getBr()
+        local x,y = Positioning.getBr(self)        
+        return {x=x, y=y}
+    end
+    
+    function obj:getCc()
+        local x,y = Positioning.getCc(self)        
+        return {x=x, y=y}
+    end
         
     function obj:atl() return Positioning.atl(self) end    
     function obj:atc() return Positioning.atc(self) end    
@@ -301,10 +382,10 @@ Positioning.bake = function( obj, bakeOpt )
     function obj:abc() return Positioning.abc(self) end    
     function obj:abr() return Positioning.abr(self) end
         
-    function obj:pushleft(mod) return Positioning.push(self, -getPushMod(mod), 0) end    
-    function obj:pushup(mod) return Positioning.push(self, 0, -getPushMod(mod)) end
-    function obj:pushright(mod) return Positioning.push(self, getPushMod(mod), 0) end    
-    function obj:pushdown(mod) return Positioning.push(self, 0, getPushMod(mod)) end    
+    function obj:pushleft(mod) return setPosW(self, Positioning.push(self, -getPushMod(mod), 0)) end    
+    function obj:pushup(mod) return setPosW(self, Positioning.push(self, 0, -getPushMod(mod))) end
+    function obj:pushright(mod) return setPosW(self, Positioning.push(self, getPushMod(mod), 0)) end    
+    function obj:pushdown(mod) return setPosW(self, Positioning.push(self, 0, getPushMod(mod))) end    
         
     return obj
 end
