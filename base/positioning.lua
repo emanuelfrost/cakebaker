@@ -201,6 +201,72 @@ Positioning.toRightOf = function ( target )
     return trx, ccy  
 end
 
+--Absolute positioning
+
+Positioning.belowTopOf = function ( obj, target, p, x, y )
+    local p,x,y = p or 0, x or 0, y or 0        
+    local tx,ty = Positioning.above(target)    
+    tx = tx - ((0.5-p)*(target.contentWidth-obj.contentWidth))-((0.5-obj.anchorX)*obj.contentWidth)
+    ty = ty + obj.anchorY*obj.contentHeight    
+    return tx+x,ty+y
+end
+
+Positioning.aboveTopOf = function ( obj, target, p, x, y )
+    local p,x,y = p or 0, x or 0, y or 0
+    local tx,ty = Positioning.above(target)
+    tx = tx - ((0.5-p)*(target.contentWidth-obj.contentWidth))-((0.5-obj.anchorX)*obj.contentWidth)
+    ty = ty - (1-obj.anchorY)*obj.contentHeight
+    return tx+x,ty+y
+end
+
+Positioning.belowBottomOf = function ( obj, target, p, x, y )
+    local p,x,y = p or 0, x or 0, y or 0
+    local tx,ty = Positioning.below(target)
+    tx = tx - ((0.5-p)*(target.contentWidth-obj.contentWidth))-((0.5-obj.anchorX)*obj.contentWidth)
+    ty = ty + obj.anchorY*obj.contentHeight
+    return tx+x,ty+y
+end
+
+Positioning.aboveBottomOf = function ( obj, target, p, x, y )
+    local p,x,y = p or 0, x or 0, y or 0
+    local tx,ty = Positioning.below(target)
+    tx = tx - ((0.5-p)*(target.contentWidth-obj.contentWidth))-((0.5-obj.anchorX)*obj.contentWidth)
+    ty = ty - (1-obj.anchorY)*obj.contentHeight
+    return tx+x,ty+y
+end
+
+Positioning.beforeLeftOf = function ( obj, target, p, x, y )
+    local p,x,y = p or 0, x or 0, y or 0
+    local tx,ty = Positioning.toLeftOf(target)
+    ty = ty - ((0.5-p)*(target.contentHeight-obj.contentHeight))-((0.5-obj.anchorY)*obj.contentHeight)
+    tx = tx - (1-obj.anchorX)*obj.contentWidth
+    return tx+x,ty+y
+end
+
+Positioning.afterLeftOf = function ( obj, target, p, x, y )
+    local p,x,y = p or 0, x or 0, y or 0
+    local tx,ty = Positioning.toLeftOf(target)
+    ty = ty - ((0.5-p)*(target.contentHeight-obj.contentHeight))-((0.5-obj.anchorY)*obj.contentHeight)
+    tx = tx + obj.anchorX*obj.contentWidth
+    return tx+x,ty+y
+end
+
+Positioning.beforeRightOf = function ( obj, target, p, x, y )
+    local p,x,y = p or 0, x or 0, y or 0
+    local tx,ty = Positioning.toRightOf(target)
+    ty = ty - ((0.5-p)*(target.contentHeight-obj.contentHeight))-((0.5-obj.anchorY)*obj.contentHeight)
+    tx = tx - (1-obj.anchorX)*obj.contentWidth
+    return tx+x,ty+y
+end
+
+Positioning.afterRightOf = function ( obj, target, p, x, y )
+    local p,x,y = p or 0, x or 0, y or 0
+    local tx,ty = Positioning.toRightOf(target)
+    ty = ty - ((0.5-p)*(target.contentHeight-obj.contentHeight))-((0.5-obj.anchorY)*obj.contentHeight)
+    tx = tx + obj.anchorX*obj.contentWidth
+    return tx+x,ty+y
+end
+
 --Getters
 
 Positioning.getTl = function(obj)
@@ -345,6 +411,38 @@ Positioning.bake = function( obj, bakeOpt )
     function obj:toLeftOf(target) return setPosW(self, Positioning.toLeftOf(target)) end
     function obj:toRightOf(target) return setPosW(self, Positioning.toRightOf(target)) end
         
+    function obj:belowTopOf(target, p, x, y ) 
+        return setPosW(self, Positioning.belowTopOf(self, target, p, x, y ))        
+    end
+    
+    function obj:aboveTopOf(target, p, x, y) 
+        return setPosW(self, Positioning.aboveTopOf(self, target, p, x, y ))  
+    end
+    
+    function obj:belowBottomOf(target, p, x, y) 
+        return setPosW(self, Positioning.belowBottomOf(self, target, p, x, y ))  
+    end
+    
+    function obj:aboveBottomOf(target, p, x, y) 
+        return setPosW(self, Positioning.aboveBottomOf(self, target, p, x, y ))  
+    end
+    
+    function obj:beforeLeftOf(target, p, x, y) 
+        return setPosW(self, Positioning.beforeLeftOf(self, target, p, x, y ))  
+    end
+    
+    function obj:afterLeftOf(target, p, x, y) 
+        return setPosW(self, Positioning.afterLeftOf(self, target, p, x, y ))  
+    end
+    
+    function obj:beforeRightOf(target, p, x, y) 
+        return setPosW(self, Positioning.beforeRightOf(self, target, p, x, y ))  
+    end
+    
+    function obj:afterRightOf(target, p, x, y) 
+        return setPosW(self, Positioning.afterRightOf(self, target, p, x, y ))  
+    end
+        
     function obj:getTl()
         local x,y = Positioning.getTl(self)        
         return {x=x, y=y}
@@ -382,10 +480,10 @@ Positioning.bake = function( obj, bakeOpt )
     function obj:abc() return Positioning.abc(self) end    
     function obj:abr() return Positioning.abr(self) end
         
-    function obj:pushleft(mod) return setPosW(self, Positioning.push(self, -getPushMod(mod), 0)) end    
-    function obj:pushup(mod) return setPosW(self, Positioning.push(self, 0, -getPushMod(mod))) end
-    function obj:pushright(mod) return setPosW(self, Positioning.push(self, getPushMod(mod), 0)) end    
-    function obj:pushdown(mod) return setPosW(self, Positioning.push(self, 0, getPushMod(mod))) end    
+    function obj:pushLeft(mod) return setPosW(self, Positioning.push(self, -getPushMod(mod), 0)) end    
+    function obj:pushUp(mod) return setPosW(self, Positioning.push(self, 0, -getPushMod(mod))) end
+    function obj:pushRight(mod) return setPosW(self, Positioning.push(self, getPushMod(mod), 0)) end    
+    function obj:pushDown(mod) return setPosW(self, Positioning.push(self, 0, getPushMod(mod))) end    
         
     return obj
 end
