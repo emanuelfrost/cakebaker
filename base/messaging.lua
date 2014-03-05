@@ -56,7 +56,7 @@ Messaging.on = function( obj, name, action )
     return obj
 end
 
-Messaging.say = function( obj, name, params )
+Messaging.trigger = function( obj, name, params )
     if not params then
         params = {}
     end
@@ -77,7 +77,7 @@ Messaging.bake = function( obj )
     
     function obj:on(name, action) return Messaging.on(self, name, action ) end 
 
-    function obj:say(name, params) return Messaging.say(self, name, params ) end 
+    function obj:trigger(name, params) return Messaging.trigger(self, name, params ) end 
 
     function obj:removeEvents() return Messaging.removeEvents( self ) end     
     

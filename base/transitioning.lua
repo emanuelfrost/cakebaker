@@ -59,7 +59,7 @@ Transitioning.bake = function( obj )
             local tran = table.remove(obj.transitions, 1)
             obj.transition = transition.to(obj, tran)
         else
-            msg.say(obj, messages.ChainComplete)
+            msg.trigger(obj, messages.ChainComplete)
         end
     end
     

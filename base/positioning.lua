@@ -153,6 +153,23 @@ Positioning.pos = function ( xMod, yMod, opt )
     return x,y
 end
 
+--display
+
+Positioning.getDisplay = function(excludeStatusbarContentHeight)
+    local exstat = excludeStatusbarContentHeight or true
+    local ox = display.contentCenterX
+    local oy = display.contentCenterY    
+    local dw = display.contentWidth
+    local dh = display.contentHeight
+    
+    if exstat == true then
+        oy = oy + display.topStatusBarContentHeight/2
+        dh = dh - display.topStatusBarContentHeight
+    end
+    
+    return ox, oy, dw, dh
+end
+
 --Grid
 
 Positioning.grid = function ( xMod, yMod, opt )
