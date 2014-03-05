@@ -48,7 +48,6 @@ Transitioning.merge = function(t1,t2)
     return m
 end
 
-
 Transitioning.bake = function( obj )    
     obj.transition = nil
     obj.transitions = {}    

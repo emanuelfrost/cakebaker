@@ -38,6 +38,8 @@ local getPos = function(obj, xMod, yMod)
     return x, y
 end
 
+Positioning.getPos = getPos
+
 --Positioning
 
 Positioning.tl = function( opt )
