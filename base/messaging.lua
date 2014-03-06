@@ -36,23 +36,24 @@ end
 
 Messaging.removeEvents = function( obj )    
     for key,value in pairs(obj.events) do 
-        obj:removeEventListener( key, value )
+        Messaging.removeEvent( obj, key )
     end
     return obj
 end
 
 Messaging.removeEvent = function( obj, name )    
     if obj.events[name] ~= nil then
-        obj:removeEventListener( name, obj.events[name] )
+        for i=1, #obj.events[name] do
+            obj:removeEventListener( name, obj.events[name][i] )
+        end
     end    
     return obj
 end
 
 Messaging.on = function( obj, name, action )    
-    if obj.events[name] == nil then
-        obj.events[name] = action    
-        obj:addEventListener( name, action )
-    end    
+    obj.events[name] = obj.events[name] or {}    
+    table.insert(obj.events[name], action)
+    obj:addEventListener( name, obj.events[name][#obj.events[name]] )    
     return obj
 end
 
@@ -61,7 +62,7 @@ Messaging.trigger = function( obj, name, params )
         params = {}
     end
     params.name = name
-    obj:dispatchEvent( params )  
+    obj:dispatchEvent( params )          
     return obj
 end
 

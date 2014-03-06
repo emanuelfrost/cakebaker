@@ -462,31 +462,6 @@ Positioning.bake = function( obj, bakeOpt )
         return setPosW(self, Positioning.afterRightOf(self, target, p, x, y ))  
     end
         
-    function obj:getTl()
-        local x,y = Positioning.getTl(self)        
-        return {x=x, y=y}
-    end
-    
-    function obj:getTr()
-        local x,y = Positioning.getTr(self)        
-        return {x=x, y=y}
-    end
-    
-    function obj:getBl()
-        local x,y = Positioning.getBl(self)        
-        return {x=x, y=y}
-    end
-    
-    function obj:getBr()
-        local x,y = Positioning.getBr(self)        
-        return {x=x, y=y}
-    end
-    
-    function obj:getCc()
-        local x,y = Positioning.getCc(self)        
-        return {x=x, y=y}
-    end
-        
     function obj:atl() return Positioning.atl(self) end    
     function obj:atc() return Positioning.atc(self) end    
     function obj:atr() return Positioning.atr(self) end

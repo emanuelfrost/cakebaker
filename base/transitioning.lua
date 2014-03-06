@@ -1,11 +1,11 @@
 local msg = require "base.messaging"
 local Transitioning = {}
 
-local messages = {
+local events = {
     ChainComplete = "chaincomplete"
 }
 
-Transitioning.messages = messages
+Transitioning.events = events
 
 Transitioning.dispose = function(handler)
     if handler ~= nil then
@@ -27,14 +27,24 @@ Transitioning.addTransition = function(obj, params)
     table.insert(obj.transitions, params)
 end
 
-Transitioning.getXy = function(xy, t, d, ease)
+Transitioning.getXy = function(x, y, t, d, ease)
     local e = ease or easing.linear
-    return {x=xy.x,y=xy.y,time=t,delay=d,transition=e}
+    return {x=x,y=y,time=t,delay=d,transition=e}
 end
 
 Transitioning.getAlpha = function(a, t, d, ease)
     local e = ease or easing.linear
     return {alpha=a,time=t,delay=d,transition=e}
+end
+
+Transitioning.getScale = function(obj, scaleX, scaleY, t, d, ease)
+    ease = ease or easing.linear
+    d = d or 0
+    
+    local xScaleVar = (obj.contentWidth+scaleX)/obj.contentWidth
+    local yScaleVar = (obj.contentHeight+scaleY)/obj.contentHeight
+    
+    return {xScale=xScaleVar,yScale=yScaleVar,time=t,delay=d,transition=ease}    
 end
 
 Transitioning.merge = function(t1,t2)
@@ -58,7 +68,7 @@ Transitioning.bake = function( obj )
             local tran = table.remove(obj.transitions, 1)
             obj.transition = transition.to(obj, tran)
         else
-            msg.trigger(obj, messages.ChainComplete)
+            msg.trigger(obj, events.ChainComplete)
         end
     end
     
